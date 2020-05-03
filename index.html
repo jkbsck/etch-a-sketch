@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Etch-A-Sketch</title>
+    </head>
+    <body>
+        <button id="reset-button">RESET</button>
+        <div id="container"></div>
+    </body>
+</html>
+
+<script>
+
+    function createGrid(gridSize){
+
+        if (container !== null){
+            for (let i = 1; i <= lastSize; i++){
+                for (let j = 1; j <= lastSize; j++){
+                    document.getElementById(`${i}-${j}`).remove();
+                }
+            }
+        }
+
+        container = document.querySelector("#container");
+        container.setAttribute("style", "display: grid; position: relative; border: solid 3px;\
+            border-color: black; height: 860px; width: 860px");
+
+        for (let i = 1; i <= gridSize; i++){
+            for (let j = 1; j <= gridSize; j++){
+                currentContainer = document.createElement("div");
+                currentContainer.setAttribute(`id`, `${i}-${j}`);
+                currentContainer.setAttribute(`class`, `grid-container`);
+                currentContainer.setAttribute(`style`, `height: ${(860 - gridSize - gridSize) / gridSize}px;\
+                    width: ${(860 - gridSize - gridSize) / gridSize}px; background-color: #D53;\
+                    border: solid .5px; grid-area: ${i} / ${j} / ${i + 1} / ${j + 1}`);
+
+                currentContainer.addEventListener("mouseover", (e) => {
+                    document.getElementById(`${i}-${j}`).style.backgroundColor = `#${randomHex()}${randomHex()}${randomHex()}`;
+                    console.log('lol');
+                });
+                container.appendChild(currentContainer);
+            }
+        }
+    }
+
+    function randomHex(){
+        let randomDec = Math.floor(Math.random() * 15);
+        return randomDec.toString(16);
+    }
+
+    let container;
+    let currentContainer;
+    let gridSize = 16;
+    let lastSize;
+
+    /*container = document.querySelector("#container");
+    container.setAttribute("style", "display: grid; position: relative; border: solid 3px;\
+    border-color: black; height: 860px; width: 860px");*/
+
+    let resetButton = document.querySelector("button");
+    resetButton.setAttribute("style", "position: absolute; margin: 20px auto auto 900px");
+
+    createGrid(gridSize);
+
+    resetButton.addEventListener("click", (e) => {
+        lastSize = gridSize;
+        gridSize = prompt("Enter size of grid:","16");
+        createGrid(gridSize);
+    });   
+ 
+
+    /*for (let i = 1; i <= gridSize; i++){
+        for (let j = 1; j <= gridSize; j++){
+            currentContainer = document.createElement("div");
+            currentContainer.setAttribute(`id`, `${i}-${j}`);
+            currentContainer.setAttribute(`class`, `grid-container`);
+            currentContainer.setAttribute(`style`, `height: ${860 / gridSize}px;\
+            width: ${860 / gridSize}px; background-color: #D53;\
+            border: solid .5px; grid-area: ${i} / ${j} / ${i + 1} / ${j + 1}; justify-self: center;\
+            align-self: center`);
+
+            currentContainer.addEventListener("mouseover", (e) => {
+                document.getElementById(`${i}-${j}`).style.backgroundColor = "#55D";
+                console.log('lol');
+            });
+            container.appendChild(currentContainer);
+        }
+    }*/
+
+</script>

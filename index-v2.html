@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+        <title>Etch-A-Sketch v2</title>
+    </head>
+    <body>
+        <button id="reset-button">RESET</button>
+        <div id="container"></div>
+    </body>
+</html>
+
+<script>
+
+    // function in which basically everithing runs 
+    function createGrid(gridSize){
+        
+        // this part removes old grid       
+        for (let i = 1; i <= lastSize; i++){
+            for (let j = 1; j <= lastSize; j++){
+                document.getElementById(`${i}-${j}`).remove();
+            }
+        }
+        
+        // set style to parent div
+        container = document.querySelector("#container");
+        container.setAttribute("style", "display: grid; position: relative; border: solid 3px;\
+            border-color: black; height: 860px; width: 860px");
+
+        // this loop creates children divs and also contains event listener for changing the color
+        for (let i = 1; i <= gridSize; i++){
+            for (let j = 1; j <= gridSize; j++){
+                currentContainer = document.createElement("div");
+                currentContainer.setAttribute(`id`, `${i}-${j}`);
+                currentContainer.setAttribute(`class`, `grid-container`);
+                currentContainer.setAttribute(`style`, `height:\
+                    ${(860 - gridSize - gridSize) / gridSize}px;\
+                    width: ${(860 - gridSize - gridSize) / gridSize}px; background-color: #000;\
+                    border: solid .5px; grid-area: ${i} / ${j} / ${i + 1} / ${j + 1}`);
+
+                currentContainer.addEventListener("mouseover", (e) => {
+                    let mouseoverContainer = document.getElementById(`${i}-${j}`);
+                    let colorLevel = 0;
+                    let hexColorLevel;
+
+                    // loop which changes color 10% 'whiter' with every mouseover
+                    while (1){
+
+                        hexColorLevel = (250/10) * colorLevel;
+
+                        if ('rgb(' + hexColorLevel + ', ' + hexColorLevel + ', ' + hexColorLevel + ')' == mouseoverContainer.style.backgroundColor){
+                            hexColorLevel += (250/10);
+                            mouseoverContainer.style.backgroundColor = 'rgb(' + hexColorLevel + ',' + hexColorLevel + ',' + hexColorLevel + ')';
+                            break;
+                        }
+                        colorLevel++;
+                        if (colorLevel === 11) break;
+                    }
+                });
+                container.appendChild(currentContainer);
+            }
+        }
+    }
+
+    // unused function
+    function randomHex(){
+        let randomDec = Math.floor(Math.random() * 15);
+        return randomDec.toString(16);
+    }
+
+    // unused function
+    function toHex(decimalNumber){
+        return decimalNumber.toString(16);
+    }
+
+    let container;
+    let currentContainer;
+    let gridSize = 16;
+    let lastSize;
+
+    let resetButton = document.querySelector("button");
+    resetButton.setAttribute("style", "position: absolute; margin: 20px auto auto 900px");
+
+    createGrid(gridSize);
+
+    // asks for a number of grids, deletes old grid, makes new grid
+    resetButton.addEventListener("click", (e) => {
+        lastSize = gridSize;
+        gridSize = prompt("Enter size of grid:","16");
+        createGrid(gridSize);
+    });   
+
+</script>
